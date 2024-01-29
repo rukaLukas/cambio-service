@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -18,12 +20,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("cambio-service")
 public class CambioController {
 
+    @Autowired
+    Environment environment;
+
     @GetMapping("/{amount}/{from}/{to}")
     public Cambio getCambio(@RequestParam(value = "amount", defaultValue = "1") Double amount,
             @RequestParam(value = "from", defaultValue = "USD") String from,
             @RequestParam(value = "to", defaultValue = "BRL") String to) {
 
-        var cambio = new Cambio(1L, from, to, BigDecimal.ONE, BigDecimal.ONE, "Cambio-Service PORT 8000");
+        var port = environment.getProperty("local.server.port");
+        var cambio = new Cambio(1L, from, to, BigDecimal.ONE, BigDecimal.ONE, "Cambio-Service PORT " + port);
         return cambio;
     }
 
