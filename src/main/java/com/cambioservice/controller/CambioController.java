@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cambioservice.Repository.CambioRepository;
 import com.cambioservice.model.Cambio;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -15,8 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
-
+@Tag(name = "Cambio Endpoint")
 @RestController
 @RequestMapping("cambio-service")
 public class CambioController {
@@ -27,6 +29,7 @@ public class CambioController {
     @Autowired
     private CambioRepository repository;
 
+    @Operation(summary = "Get a specific cambio by your amount, from and to")
     @GetMapping("/{amount}/{from}/{to}")
     public Cambio getCambio(@RequestParam(value = "amount", defaultValue = "1") Double amount,
             @RequestParam(value = "from", defaultValue = "USD") String from,
