@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +31,15 @@ public class CambioController {
     @Autowired
     private CambioRepository repository;
 
+    private Logger logger = LoggerFactory.getLogger(CambioController.class);
+
     @Operation(summary = "Get a specific cambio by your amount, from and to")
     @GetMapping("/{amount}/{from}/{to}")
     public Cambio getCambio(@RequestParam(value = "amount", defaultValue = "1") Double amount,
             @RequestParam(value = "from", defaultValue = "USD") String from,
             @RequestParam(value = "to", defaultValue = "BRL") String to) {
 
+        logger.info("method=getCambio, amount={}, from={}, to={}", amount, from, to);
         var port = environment.getProperty("local.server.port");
         var cambio = repository.findByFromAndTo(from, to);
         if (cambio == null)
